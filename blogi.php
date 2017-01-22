@@ -12,38 +12,36 @@ include_once "inc/top.php";
                             $tietokanta = new PDO('mysql:host=localhost;dbname=blogi;charset=utf8','root','');
                 
                             $tietokanta->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                
+                            
                             //  $sql = "SELECT * FROM kirjoitus WHERE kayttaja_id=1";
-                            $sql = $tietokanta->prepare("SELECT *,kirjoitus.id as id FROM kirjoitus INNER JOIN kayttaja ON kirjoitus.kayttaja_id = kayttaja_id"
-                                    . " ORDER BY paivays desc");
+                            $sql = "SELECT *,kirjoitus.id as id FROM kirjoitus INNER JOIN kayttaja ON kirjoitus.kayttaja_id = kayttaja_id"
+                                    . " WHERE kirjoitus.id = $id ORDER BY paivays desc";
                 
                             $kysely = $tietokanta->query($sql);
-
+                            $kysely->setFetchMode(PDO::FETCH_OBJ);
+                            $tietue = $kysely->fetch();   
+                            
                             print '<div>';
-                                while ($tietue = $kysely->fetch()) {
-                                    print '<p><a href="index.php">Takaisin etusivulle</a>';
-                                    print '<span><h3><b>' . $tietue['otsikko'] . '</h3></b> ' . date('d.m.Y H.i',strtotime($tietue['paivays'])) . ' by ' . $tietue['tunnus'] . '</span><br />';
-                                    print $tietue['teksti'];
-                                    print '<br><a href="poista.php?id=' . $tietue['id']. '" onclick="return confirm(\'Jatketaanko?\');"><span class="glyphicon glyphicon-trash"></span></a>';
-                                    print '</p><hr>';
+                                    print '<p><a href="index.php">Takaisin etusivulle</a><br>';
+                                    print '<b><h3>' . $tietue->otsikko . '</h3></b>';
+                                    print '<p>' . date("d.m.Y H.i",  strtotime($tietue->paivays)) . " by " . $tietue->tunnus . "</p>";
+                                    print '<p>' . $tietue->teksti . '</p>';
+                                    if (isset($_SESSION['kayttaja_id'])) {
+                                        print '<a href="poista.php?id=' . $tietue->id . '" onclick="return confirm(\'Jatketaanko?\');"><span class="glyphicon glyphicon-trash"></a>';
                                     }
+                                    print '</p><hr>';
                             print '</div>';
                         }   
                         catch (PDOException $pdoex){
                             print '<p>Häiriö tietokannassa.' . $pdoex->getMessage(). '</p>';
                         }?>
-            <form id="lisaa_kommentti" method="post" action="<?php print($_SERVER['PHP_SELF']);?>">
-                <input type="hidden" name="kirjoitus_id" value="<?php print $tietue->id;?>">
-                <textarea name="teksti" id="teksti"></textarea>
-            </form>
-                    <?php
-                    $kysely->bindValue(':kayttaja_id', $_SESSION);
-                            
-                    $kysely->execute();
-                            
-                    header("Location: blogi.php?id=$id");
-                    exit;
-                    ?>
+                    
+                <form id="lisaa_kommentti" method="post" action="<?php print($_SERVER['PHP_SELF']);?>">
+                    <input type="hidden" name="kirjoitus_id" value="<?php print $tietue->id;?>">
+                    <textarea name="teksti" id="teksti"></textarea>
+                </form>
+                  
+            </fieldset>  
 	</div>
     </div>
 </div>

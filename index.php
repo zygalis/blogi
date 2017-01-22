@@ -18,14 +18,13 @@ include_once "inc/top.php";
                 
                             $kysely = $tietokanta->query($sql);
                             $kysely->setFetchMode(PDO::FETCH_OBJ);
-                            
-                            
+
                                 while($tietue = $kysely->fetch()) {
                                     print '<div>';
                                         print "<p>";
                                         print date("d.m.Y H.i",  strtotime($tietue->paivays)) . " by " . $tietue->tunnus . "<br/>";
                                         print "<b><a href='blogi.php?id=$tietue->id'>$tietue->otsikko</a></b>&nbsp;&nbsp;&nbsp;";
-                                        if (isset($_SESSION['login'])) {
+                                        if (isset($_SESSION['kayttaja_id'])) {
                                             print "<a href='poista.php?id=$tietue->id'><span class='glyphicon glyphicon-trash'></span></a>";     
                                         }
                                         print "</p>";     
