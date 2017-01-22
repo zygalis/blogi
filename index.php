@@ -17,17 +17,20 @@ include_once "inc/top.php";
                                     . " ORDER BY paivays desc";
                 
                             $kysely = $tietokanta->query($sql);
-
-                            print '<div>';
-
-                                while ($tietue = $kysely->fetch()) {
-                                    print '<p>';
-                                    print '<span><b>' . $tietue['otsikko'] . '</b> ' . date('d.m.Y H.i',strtotime($tietue['paivays'])) . ' by ' . $tietue['tunnus'] . '</span><br />';
-                                    print "<a href='blogi.php?id=$tietue->id'>t</a>";
-                                    print '<br><a href="poista.php?id=' . $tietue['id']. '" onclick="return confirm(\'Jatketaanko?\');"><span class="glyphicon glyphicon-trash"></span></a>';
-                                    print '</p><hr>';
-                                    }
-                            print '</div>';
+                            $kysely->setFetchMode(PDO::FETCH_OBJ);
+                            
+                            
+                                while($tietue = $kysely->fetch()) {
+                                    print '<div>';
+                                        print "<p>";
+                                        print date("d.m.Y H.i",  strtotime($tietue->paivays)) . " by " . $tietue->tunnus . "<br/>";
+                                        print "<b><a href='blogi.php?id=$tietue->id'>$tietue->otsikko</a></b>&nbsp;&nbsp;&nbsp;";
+                                        if (isset($_SESSION['login'])) {
+                                            print "<a href='poista.php?id=$tietue->id'><span class='glyphicon glyphicon-trash'></span></a>";     
+                                        }
+                                        print "</p>";     
+                                    print "</div>";
+                                }
                         }   
                         catch (PDOException $pdoex){
                             print '<p>Häiriö tietokannassa.' . $pdoex->getMessage(). '</p>';

@@ -1,9 +1,6 @@
 <?php 
-
 include_once "inc/top.php";
 ?>
-
-   
 <br>
 <div class="container aqua">
     <div class="row">
@@ -21,11 +18,8 @@ include_once "inc/top.php";
                                     . " ORDER BY paivays desc");
                 
                             $kysely = $tietokanta->query($sql);
-                            
-                            
 
                             print '<div>';
-
                                 while ($tietue = $kysely->fetch()) {
                                     print '<p><a href="index.php">Takaisin etusivulle</a>';
                                     print '<span><h3><b>' . $tietue['otsikko'] . '</h3></b> ' . date('d.m.Y H.i',strtotime($tietue['paivays'])) . ' by ' . $tietue['tunnus'] . '</span><br />';

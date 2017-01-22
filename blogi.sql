@@ -31,7 +31,7 @@ create table kommentti (
     on update current_timestamp,
     kirjoitus_id int not null,
     foreign key (kirjoitus_id) references kirjoitus(id)
-    on delete restrict
+    on delete restrict,
     kayttaja_id int not null,
     foreign key (kayttaja_id) references kayttaja(id)
     on delete restrict
