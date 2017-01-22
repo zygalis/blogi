@@ -6,8 +6,7 @@ include_once "inc/top.php";
     <div class="row">
 	<div class="col-sm-8 ">
 		<fieldset>
-                    <?php 
-                    
+                    <?php  
                     $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
                         try {
                             $tietokanta = new PDO('mysql:host=localhost;dbname=blogi;charset=utf8','root','');
@@ -43,7 +42,6 @@ include_once "inc/top.php";
                                     }
                                     print '</p>';
                             print '</div>';
-                            
                             print "<b><p class='kommentti'>Kommentit</p></b>";
                             
                             $sql = "SELECT *,kommentti.id as id FROM kommentti INNER JOIN kayttaja ON kommentti.kayttaja_id=kayttaja.id WHERE kirjoitus_id = $id";
@@ -53,30 +51,32 @@ include_once "inc/top.php";
                             if (isset($_SESSION['kayttaja_id'])) {
                             ?>
                         
-                        <form id="lisaa_kommentti" method="post" action="<?php print($_SERVER['PHP_SELF']);?>">
-                            <input type="hidden" name="kirjoitus_id" value="<?php print $tietue->id;?>">
-                            <textarea name="kommentti" id="kommentti"></textarea>
-                        </form>
+                                <form id="lisaa_kommentti" method="post" action="<?php print($_SERVER['PHP_SELF']);?>">
+                                    <input type="hidden" name="kirjoitus_id" value="<?php print $tietue->id;?>">
+                                    <textarea name="kommentti" id="kommentti"></textarea>
+                                </form>
 
-                        <?php  
-                        }
-                        print "<ul>";
-                        while($tietue2 = $kysely2->fetch()){
-                            print "<li>";
-                            print $tietue2->teksti . " " . date("d.m.Y H.i",  strtotime($tietue->paivays));
-                            print " by $tietue2->tunnus" . '&nbsp;';
-                            if (isset($_SESSION['kayttaja_id'])) {
-                                print "<a href='poista_kommentti.php?id=$tietue2->id&kirjoitus_id=$id'><span class='glyphicon glyphicon-trash'></span></a>"; 
+                            <?php  
                             }
-                            print "</li>";
-                        }
-                        print "</ul>";
-                    }   
-                    catch (PDOException $pdoex){
-                        print '<p>Häiriö tietokannassa.' . $pdoex->getMessage(). '</p>';
-                    }?>
+                            print "<ul>";
+                            while($tietue2 = $kysely2->fetch()){
+                                print "<li>";
+                                print $tietue2->teksti . " " . date("d.m.Y H.i",  strtotime($tietue->paivays));
+                                print " by $tietue2->tunnus" . '&nbsp;';
+                                if (isset($_SESSION['kayttaja_id'])) {
+                                    print "<a href='poista_kommentti.php?id=$tietue2->id&kirjoitus_id=$id'><span class='glyphicon glyphicon-trash'></span></a>"; 
+                                }
+                                print "</li>";
+                            }
+                            print "</ul>";
+                        }   
+                        catch (PDOException $pdoex){
+                            print '<p>Häiriö tietokannassa.' . $pdoex->getMessage(). '</p>';
+                        }?>
             </fieldset>  
 	</div>
     </div>
 </div>
-<?php include_once "inc/bottom.php";?>
+<?php 
+include_once "inc/bottom.php";
+?>
