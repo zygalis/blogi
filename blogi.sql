@@ -37,5 +37,6 @@ create table kommentti (
     on delete restrict
 );
 
-insert into kayttaja (sukunimi, etunimi, tunnus, salasana, email) values ('Juntunen','Jouni','jjuntune',md5('testi123'),'jjuntunen@oamk.fi');
+insert into kayttaja (sukunimi, etunimi, tunnus, salasana, email) values ('Eerika','Leppänen','n5leee00',md5('testi123'),'n5leee00@students.oamk.fi');
 insert into kirjoitus (otsikko,teksti,kayttaja_id) values ('Testi','Tekstiä tekstiä', 1);
+insert into kommentti (id, teksti, paivays, kirjoitus_id, kayttaja_id) values ('1', 'Testi kommentti', CURRENT_TIMESTAMP, '1', '1');

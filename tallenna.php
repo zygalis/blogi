@@ -34,7 +34,7 @@ and open the template in the editor.
                 $teksti = filter_input(INPUT_POST, 'teksti', FILTER_SANITIZE_STRING);
                 
                 $kysely = $tietokanta->prepare("INSERT INTO kirjoitus(kayttaja_id,otsikko,teksti) VALUES (:kayttaja_id,:otsikko,:teksti)");
-                
+
                 $kysely->bindValue(':kayttaja_id',$kayttaja_id,PDO::PARAM_INT);
                 $kysely->bindValue(':otsikko',$otsikko,PDO::PARAM_STR);
                 $kysely->bindValue(':teksti',$teksti,PDO::PARAM_STR);
